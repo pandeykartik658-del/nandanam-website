@@ -8,13 +8,17 @@ interface MiniFrameSliderProps {
 export const MiniFrameSlider = ({ images }: MiniFrameSliderProps) => {
   const [index, setIndex] = useState(0);
 
-  // Autoplay
+  // Preload so a slide never enters half-decoded
   useEffect(() => {
-    const timer = setInterval(() => {
-      setIndex((prevIndex) => (prevIndex + 1) % images.length);
-    }, 4000);
-    return () => clearInterval(timer);
-  }, [images.length]);
+    images.forEach((src) => (new Image().src = src));
+  }, [images]);
+
+  // Autoplay — restarts after each change so a manual click isn't followed by an instant auto-advance
+  useEffect(() => {
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    const timer = setTimeout(() => setIndex((i) => (i + 1) % images.length), 4000);
+    return () => clearTimeout(timer);
+  }, [index, images.length]);
 
   const handleNext = (e: React.MouseEvent) => {
     e.stopPropagation();
@@ -40,6 +44,8 @@ export const MiniFrameSlider = ({ images }: MiniFrameSliderProps) => {
     >
       <div className="absolute inset-0 bg-black/10 z-10 pointer-events-none" />
       
+      {/* Hover zoom lives on a wrapper: a CSS transform transition on the sliding img fights framer's per-frame transform */}
+      <div className="absolute inset-0 transition-transform duration-700 ease-out group-hover:scale-105">
       <AnimatePresence initial={false}>
         <motion.img
           key={images[index]}
@@ -50,11 +56,12 @@ export const MiniFrameSlider = ({ images }: MiniFrameSliderProps) => {
           animate="center"
           exit="exit"
           transition={{
-            x: { type: "spring", stiffness: 220, damping: 26 },
+            x: { type: "spring", stiffness: 220, damping: 30 },
           }}
-          className="absolute inset-0 w-full h-full object-cover grayscale-[20%] contrast-110 group-hover:scale-105 transition-transform duration-700"
+          className="absolute inset-0 w-full h-full object-cover grayscale-[20%] contrast-110"
         />
       </AnimatePresence>
+      </div>
 
       {/* Subtle indicator dots */}
       <div className="absolute bottom-3 left-1/2 -translate-x-1/2 flex gap-1.5 z-20 bg-black/40 backdrop-blur-md px-3 py-1.5 rounded-full border border-white/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300">

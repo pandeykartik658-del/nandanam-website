@@ -13,10 +13,10 @@ const PageVeilTransition = ({ children }: { children: ReactNode }) => {
       {/* Top veil */}
       <motion.div
         aria-hidden
-        className="fixed inset-x-0 top-0 z-[100] pointer-events-none"
-        initial={{ height: "50vh" }}
-        animate={{ height: 0 }}
-        exit={{ height: "50vh" }}
+        className="fixed inset-x-0 top-0 h-[50vh] origin-top z-[100] pointer-events-none"
+        initial={{ scaleY: 1 }}
+        animate={{ scaleY: 0 }}
+        exit={{ scaleY: 1 }}
         transition={{ duration: 0.9, ease: [0.83, 0, 0.17, 1] }}
         style={{
           background:
@@ -27,10 +27,10 @@ const PageVeilTransition = ({ children }: { children: ReactNode }) => {
       {/* Bottom veil */}
       <motion.div
         aria-hidden
-        className="fixed inset-x-0 bottom-0 z-[100] pointer-events-none"
-        initial={{ height: "50vh" }}
-        animate={{ height: 0 }}
-        exit={{ height: "50vh" }}
+        className="fixed inset-x-0 bottom-0 h-[50vh] origin-bottom z-[100] pointer-events-none"
+        initial={{ scaleY: 1 }}
+        animate={{ scaleY: 0 }}
+        exit={{ scaleY: 1 }}
         transition={{ duration: 0.9, ease: [0.83, 0, 0.17, 1] }}
         style={{
           background:

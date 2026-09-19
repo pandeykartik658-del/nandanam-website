@@ -1,4 +1,4 @@
-import { motion } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 import { useState } from "react";
 import { Calendar, MapPin, ArrowUpRight } from "lucide-react";
 
@@ -112,6 +112,7 @@ const Events = () => {
 
       {/* Event cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <AnimatePresence mode="popLayout" initial={false}>
         {visible.map((event, i) => (
           <motion.article
             key={event.title}
@@ -119,7 +120,8 @@ const Events = () => {
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: "-50px" }}
-            transition={{ duration: 0.5, delay: i * 0.08 }}
+            exit={{ opacity: 0, scale: 0.96, transition: { duration: 0.25 } }}
+            transition={{ duration: 0.5, delay: i * 0.08, ease: [0.22, 1, 0.36, 1], layout: { type: "spring", stiffness: 350, damping: 35 } }}
             whileHover={{ y: -6, boxShadow: "0 20px 50px -20px hsl(320 55% 35% / 0.4)" }}
             className="group relative glass-surface rounded-2xl border border-border/50 p-6 overflow-hidden"
           >
@@ -167,6 +169,7 @@ const Events = () => {
             <div className="pointer-events-none absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 bg-gradient-to-br from-primary/5 via-transparent to-transparent" />
           </motion.article>
         ))}
+        </AnimatePresence>
       </div>
 
       <footer className="text-center py-8 mt-20 border-t border-border/30">

@@ -24,14 +24,6 @@ const RotatingShowcase = ({ images, reverse = false }: RotatingShowcaseProps) =>
   const rotateX = useSpring(useTransform(y, [-0.5, 0.5], [6, -6]), { stiffness: 150, damping: 18 });
   const rotateY = useSpring(useTransform(x, [-0.5, 0.5], [-6, 6]), { stiffness: 150, damping: 18 });
 
-  // Autoplay — also advances on click/keyboard/swipe
-  useEffect(() => {
-    const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    if (reduced) return;
-    const id = setInterval(next, 4500);
-    return () => clearInterval(id);
-  }, [next]);
-
   const next = useCallback(() => {
     setDirection(1);
     setIndex((i) => (i + 1) % images.length);
@@ -41,6 +33,14 @@ const RotatingShowcase = ({ images, reverse = false }: RotatingShowcaseProps) =>
     setDirection(-1);
     setIndex((i) => (i - 1 + images.length) % images.length);
   }, [images.length]);
+
+  // Autoplay — timer restarts on every slide change so a manual click never gets an instant auto-advance
+  useEffect(() => {
+    const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (reduced) return;
+    const id = setTimeout(next, 4500);
+    return () => clearTimeout(id);
+  }, [next, index]);
 
   // Keyboard navigation
   const handleKey = (e: React.KeyboardEvent) => {

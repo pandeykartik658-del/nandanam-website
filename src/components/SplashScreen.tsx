@@ -5,11 +5,12 @@ const SplashScreen = () => {
   const opacity = useTransform(scrollY, [0, 600], [1, 0]);
   const scale = useTransform(scrollY, [0, 600], [1, 2.5]);
   const blur = useTransform(scrollY, [0, 600], [0, 20]);
-  const letterSpacing = useTransform(scrollY, [0, 600], [6, 40]);
+  // Once faded out, stop compositing this full-screen layer and its infinite loops
+  const visibility = useTransform(scrollY, (v) => (v >= 600 ? "hidden" : "visible"));
 
   return (
     <motion.div
-      style={{ opacity }}
+      style={{ opacity, visibility }}
       className="fixed inset-0 z-50 flex items-center justify-center pointer-events-none"
     >
       {/* Deep wine radial bg */}
@@ -48,7 +49,6 @@ const SplashScreen = () => {
             className="font-display text-4xl md:text-7xl tracking-[6px] uppercase glow-text text-gradient-ivory"
             style={{
               filter: useTransform(blur, (v) => `blur(${v}px)`),
-              letterSpacing: useTransform(letterSpacing, (v) => `${v}px`),
             }}
             animate={{ opacity: [0.7, 1, 0.7] }}
             transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}

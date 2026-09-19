@@ -120,7 +120,6 @@ const Landing = () => {
   const heroY = useTransform(heroProgress, [0, 1], [0, 150]);
   const heroScale = useTransform(heroProgress, [0, 1], [1, 0.92]);
   const heroOpacity = useTransform(heroProgress, [0, 0.5, 0.85], [1, 0.6, 0]);
-  const heroBlur = useTransform(heroProgress, [0, 0.85], ["blur(0px)", "blur(8px)"]);
 
   const [expanded, setExpanded] = useState(false);
 
@@ -128,7 +127,7 @@ const Landing = () => {
     <div className="noise-overlay">
       <motion.section
         ref={heroRef}
-        style={{ y: heroY, scale: heroScale, opacity: heroOpacity, filter: heroBlur }}
+        style={{ y: heroY, scale: heroScale, opacity: heroOpacity }}
         className="min-h-[80vh] flex flex-col items-center justify-center text-center px-6 relative"
       >
         <motion.div
@@ -163,6 +162,7 @@ const Landing = () => {
               <motion.span
                 key={i}
                 className="inline-block text-gradient-wine"
+                style={{ transformPerspective: 600 }}
                 initial={{ y: 120, rotateX: -90, opacity: 0 }}
                 animate={{ y: 0, rotateX: 0, opacity: 1 }}
                 transition={{ duration: 0.8, delay: 0.6 + i * 0.04, ease: [0.22, 1, 0.36, 1] }}

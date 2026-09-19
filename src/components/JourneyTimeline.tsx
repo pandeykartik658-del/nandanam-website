@@ -15,7 +15,7 @@ const JourneyTimeline = () => {
     target: ref,
     offset: ["start 70%", "end 30%"],
   });
-  const lineHeight = useTransform(scrollYProgress, [0, 1], ["0%", "100%"]);
+  const lineScale = useTransform(scrollYProgress, [0, 1], [0, 1]);
 
   return (
     <section className="max-w-[900px] mx-auto px-6 py-24">
@@ -39,9 +39,9 @@ const JourneyTimeline = () => {
         <div className="absolute left-3 md:left-7 top-0 bottom-0 w-[1px] bg-white/8" />
         {/* Animated wine line */}
         <motion.div
-          className="absolute left-3 md:left-7 top-0 w-[1px]"
+          className="absolute left-3 md:left-7 top-0 bottom-0 w-[1px] origin-top"
           style={{
-            height: lineHeight,
+            scaleY: lineScale,
             background: "linear-gradient(180deg, hsl(330 60% 65%), hsl(320 55% 55%), hsl(280 40% 35%))",
             boxShadow: "0 0 14px hsl(320 55% 55% / 0.6)",
           }}
